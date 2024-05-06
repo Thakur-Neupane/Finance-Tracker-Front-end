@@ -1,16 +1,20 @@
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { Footer } from "../components/Footer";
 import { TopNav } from "../components/TopNav";
-import { CustomInput } from "../components/CustomInput";
+import { CustomInpute } from "../components/CustomInpute";
 import { userLogin } from "../helpers/axiosHelper";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({ setLoggedInUser }) => {
+const Login = ({ setLoggedInUser, loggedInUser }) => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState({});
   const [resp, setResp] = useState({});
+
+  useEffect(() => {
+    loggedInUser?._id && navigate("/dashboard");
+  }, [loggedInUser]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -28,6 +32,9 @@ const Login = ({ setLoggedInUser }) => {
 
     if (result?.status === "success") {
       setLoggedInUser(result.user);
+
+      localStorage.setItem("user", JSON.stringify(result.user));
+
       navigate("/dashboard");
     }
   };
@@ -61,7 +68,9 @@ const Login = ({ setLoggedInUser }) => {
           >
             <div className="shadow-lg rounded p-3 text-white">
               <h1>Welcome Back</h1>
-              <p>Login to your account and take controll of your finance.</p>
+              <p className="text-blue">
+                Login to your account and take controll of your finance.
+              </p>
             </div>
           </Col>
           <Col
@@ -81,7 +90,7 @@ const Login = ({ setLoggedInUser }) => {
 
               <Form onSubmit={handOnSubmit}>
                 {inputes.map((item, i) => (
-                  <CustomInput key={i} {...item} onChange={handleOnChange} />
+                  <CustomInpute key={i} {...item} onChange={handleOnChange} />
                 ))}
 
                 <div className="d-grid">

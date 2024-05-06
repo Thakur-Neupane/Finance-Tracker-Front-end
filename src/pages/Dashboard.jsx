@@ -1,18 +1,26 @@
-import { Container } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { TopNav } from "../components/TopNav";
 import { Footer } from "../components/Footer";
-import { AuthComp } from "../components/AuthComponent";
+import { AuthComp } from "../components/AuthComp";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { NewTransForm } from "../components/NewTransForm";
+import { TransactionTable } from "../components/TransactionTable";
+import { fetchTrans } from "../helpers/axiosHelper";
+import { toast } from "react-toastify";
 
 const Dashboard = ({ loggedInUser }) => {
-  // const navigate = useNavigate();
+  const [transactions, setTransactions] = useState([]);
 
-  // useEffect(() => {
-  //   if (!loggedInUser?._id) {
-  //     return navigate("/");
-  //   }
-  // }, []);
+  useEffect(() => {
+    getUserTransactions();
+  }, []);
+
+  const getUserTransactions = async () => {
+    const { status, message, trans } = await fetchTrans();
+
+    status === "error" ? toast.error(message) : setTransactions(trans);
+  };
 
   return (
     <AuthComp loggedInUser={loggedInUser}>
@@ -20,8 +28,16 @@ const Dashboard = ({ loggedInUser }) => {
       <TopNav loggedInUser={loggedInUser} />
       {/* main body  */}
       <Container className="main pt-2">
-        <h4>Dashboard | Welcome back {loggedInUser?.name}</h4>
+        <h4>Dashboar | Welcome back {loggedInUser?.name}</h4>
         <hr />
+
+        <NewTransForm getUserTransactions={getUserTransactions} />
+
+        <Row className="mt-5">
+          <Col>
+            <TransactionTable transactions={transactions} />
+          </Col>
+        </Row>
       </Container>{" "}
       {/* footer  */}
       <Footer />
