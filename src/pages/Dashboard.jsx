@@ -8,6 +8,7 @@ import { NewTransForm } from "../components/NewTransForm";
 import { TransactionTable } from "../components/TransactionTable";
 import { fetchTrans } from "../helpers/axiosHelper";
 import { toast } from "react-toastify";
+import { CustomModal } from "../components/CustomModal";
 
 const Dashboard = ({ loggedInUser }) => {
   const [transactions, setTransactions] = useState([]);
@@ -28,10 +29,11 @@ const Dashboard = ({ loggedInUser }) => {
       <TopNav loggedInUser={loggedInUser} />
       {/* main body  */}
       <Container className="main pt-2">
-        <h4>Dashboar | Welcome back {loggedInUser?.name}</h4>
+        <h4>Dashboard | Welcome back {loggedInUser?.name}</h4>
         <hr />
-
-        <NewTransForm getUserTransactions={getUserTransactions} />
+        <CustomModal title="Add new Transaction">
+          <NewTransForm getUserTransactions={getUserTransactions} />
+        </CustomModal>
 
         <Row className="mt-5">
           <Col>
