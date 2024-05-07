@@ -4,7 +4,7 @@ import { CustomInpute, CustomSelect } from "./CustomInpute";
 import { postNewTrans } from "../helpers/axiosHelper";
 import { toast } from "react-toastify";
 
-export const NewTransForm = ({ getUserTransactions }) => {
+export const NewTransForm = ({ getUserTransactions, setShowForm }) => {
   const [form, setForm] = useState({});
 
   const handleOnChange = (e) => {
@@ -22,7 +22,7 @@ export const NewTransForm = ({ getUserTransactions }) => {
 
     toast[status](message);
 
-    status === "success" && getUserTransactions();
+    status === "success" && getUserTransactions() && setShowForm(false);
   };
 
   const inputs = [
